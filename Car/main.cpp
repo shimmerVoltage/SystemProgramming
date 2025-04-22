@@ -1,4 +1,4 @@
-#include<iostream>
+ï»¿#include<iostream>
 using namespace std;
 
 #define MIN_TANK_CAPACITY	20
@@ -56,16 +56,78 @@ public:
 	}
 };
 
+#define MIN_ENGINE_CONSUMPTION		3
+#define MAX_ENGINE_CONSUMPTION		25	
+
+class Engine
+{
+	const double CONSUMPTION;
+	const double DEFAULT_CONSUMPTION_PER_SECOND;	
+	double consumption_per_second;
+	bool is_started;
+public:
+	double get_consumption_per_second()const
+	{
+		return consumption_per_second;
+	}
+	Engine(double consumption):
+		CONSUMPTION
+		(
+			consumption < MIN_ENGINE_CONSUMPTION ? MIN_ENGINE_CONSUMPTION :
+			consumption > MAX_ENGINE_CONSUMPTION ? MAX_ENGINE_CONSUMPTION :
+			consumption
+		),
+		DEFAULT_CONSUMPTION_PER_SECOND(CONSUMPTION * 3e-5),
+		consumption_per_second(DEFAULT_CONSUMPTION_PER_SECOND)
+	{
+		cout << "Engine is ready..." << endl;
+	}
+	~Engine()
+	{
+		cout << "Engine is over!" << endl;
+	}
+	void start()
+	{
+		is_started = true;
+	}
+	void stop()
+	{
+		is_started = false;
+	}
+	bool started()const
+	{
+		return is_started;
+	}
+	void info()const
+	{
+		cout << "Consumption:\t\t" << CONSUMPTION << " liters/100km" << endl;
+		cout << "Default Consumption:\t" << DEFAULT_CONSUMPTION_PER_SECOND << " liters/s" << endl;
+		cout << "Consumption:\t\t" << consumption_per_second << " liters/s" << endl;
+	}
+};
+
+//#define TANK_CHECK
+//#define ENGINE_CHECK
+
 void main()
 {
+#ifdef TANK_CHECK
 	setlocale(LC_ALL, "");
 	Tank tank(80);
 	double fuel;
 	do
 	{
-		cout << "Ââåäèòå áåíçèí!!"; cin >> fuel;
+		cout << "Ð£ÐºÐ°Ð¶Ð¸Ñ‚Ðµ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð±ÐµÐ½Ð·Ð¸Ð½Ð°: "; cin >> fuel;
 		tank.fill(fuel);
 		tank.info();
 	} while (true);
+#endif // TANK_CHECK
+
+#ifdef ENGINE_CHECK
+
+	Engine engine(10);
+	engine.info();
+
+#endif // ENGINE_CHECK
 
 }
